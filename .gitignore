@@ -1,0 +1,35 @@
+# Dependencies
+node_modules/
+__pycache__/
+.venv/
+venv/
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Logs
+*.log
+logs/
+
+# Environment
+.env
+.env.local
+.env.production
+
+# Build
+dist/
+build/
+*.pyc
+*.pyo
+
+# Backup files
+.sanitize-backup-*
+.personal-info-scan.log

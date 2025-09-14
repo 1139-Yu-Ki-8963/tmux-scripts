@@ -53,7 +53,48 @@ ln -s $(pwd)/tmux-kill-select.sh ~/.local/bin/tmux-kill
 
 - Bash
 - Tmux
+- Claude Code (`claude`コマンド)
 - `~/Products`ディレクトリ（tmux-project-launcher.sh用）
+
+### Claude Code設定（必須）
+
+tmux-project-launcher.shは上位2ペインでClaude Codeを自動起動します。
+デフォルトでは`cc`コマンドを使用します。
+
+#### 初回セットアップ
+
+```bash
+# エイリアス設定スクリプトを実行
+./setup-alias.sh
+
+# 設定を反映
+source ~/.zshrc  # または source ~/.bashrc
+```
+
+#### 手動設定の場合
+
+```bash
+# ~/.zshrc または ~/.bashrcに追加
+alias cc='claude --dangerously-skip-permissions'
+```
+
+#### カスタムコマンドを使用する場合
+
+```bash
+# 環境変数でコマンドを指定
+export CLAUDE_CMD="claude"
+./tmux-project-launcher.sh
+```
+
+#### 動作確認
+
+```bash
+# エイリアス確認
+which cc
+
+# Claude Code起動テスト
+cc --version
+```
 
 ## ライセンス
 

@@ -1,50 +1,60 @@
 # tmux-scripts
 
-Tmux自動化と管理用スクリプトツール集
+Tmuxプロジェクト管理とセッション制御用スクリプト集
 
-## バッジ
+## 概要
 
-![License](https://img.shields.io/badge/license-MIT-blue.svg)
+プロジェクトディレクトリの選択・起動とTmuxセッション管理を効率化する2つのBashスクリプトです。
 
-## 目次
+## スクリプト一覧
 
-- [機能](#機能)
-- [インストール](#インストール)
-- [使用方法](#使用方法)
-- [ライセンス](#ライセンス)
+### 1. tmux-project-launcher.sh
+プロジェクトディレクトリを選択してTmuxセッションを起動するランチャーです。
 
-## 機能
+**機能:**
+- `~/Products`ディレクトリ内のプロジェクトを一覧表示
+- 選択したプロジェクトでTmuxセッションを作成
+- 5ペイン構成での開発環境を自動セットアップ
 
-- シンプルなShell Script実装
-- 最小限の依存関係
+**使用方法:**
+```bash
+./tmux-project-launcher.sh
+```
+
+### 2. tmux-kill-select.sh
+実行中のTmuxセッションを選択して削除するツールです。
+
+**機能:**
+- 実行中のTmuxセッション一覧を表示
+- セッションを選択して安全に削除
+- 複数セッション管理の効率化
+
+**使用方法:**
+```bash
+./tmux-kill-select.sh
+```
 
 ## インストール
 
-### 手動インストール
-
 ```bash
 # リポジトリをクローン
-git clone https://github.com/user/tmux-scripts.git
+git clone https://github.com/1139-Yu-Ki-8963/tmux-scripts.git
 cd tmux-scripts
 
+# 実行権限を付与
+chmod +x *.sh
+
+# パスの通った場所にシンボリックリンクを作成（オプション）
+ln -s $(pwd)/tmux-project-launcher.sh ~/.local/bin/tmux-launch
+ln -s $(pwd)/tmux-kill-select.sh ~/.local/bin/tmux-kill
 ```
 
-## 使用方法
+## 必要な環境
 
-## 貢献
-
-プロジェクトへの貢献を歓迎します！
-
-1. このリポジトリをフォーク
-2. フィーチャーブランチを作成 (`git checkout -b feature/amazing-feature`)
-3. 変更をコミット (`git commit -m 'Add amazing feature'`)
-4. ブランチにプッシュ (`git push origin feature/amazing-feature`)
-5. プルリクエストを作成
+- Bash
+- Tmux
+- `~/Products`ディレクトリ（tmux-project-launcher.sh用）
 
 ## ライセンス
 
-このプロジェクトはMITライセンスの下で配布されています。
-
----
-
-🤖 このREADMEは[Claude Code](https://claude.ai/code)によって自動生成されました。
+MIT License

@@ -1,17 +1,11 @@
-# Dependencies
-node_modules/
-__pycache__/
-.venv/
-venv/
-
-# IDE
+# IDE files
 .vscode/
 .idea/
 *.swp
 *.swo
 *~
 
-# OS
+# OS files
 .DS_Store
 Thumbs.db
 
@@ -19,17 +13,6 @@ Thumbs.db
 *.log
 logs/
 
-# Environment
-.env
-.env.local
-.env.production
-
-# Build
-dist/
-build/
-*.pyc
-*.pyo
-
-# Backup files
+# Temporary files
 .sanitize-backup-*
 .personal-info-scan.log

@@ -12,7 +12,7 @@ RED='\033[0;31m'
 NC='\033[0m' # No Color
 
 # Projectsフォルダのパス
-PROJECTS_DIR="$HOME/Products"
+PROJECTS_DIR="$HOME/Projects"
 
 echo "================================================"
 echo "       tmuxプロジェクトランチャー"
@@ -64,13 +64,13 @@ create_5pane() {
         tmux send-keys -t "$session:0.$i" "clear" C-m
     done
     
-    # 最上段ペイン（PRESIDENT）でClaude Code起動
-    echo -e "${YELLOW}Starting Claude Code in PRESIDENT pane...${NC}"
-    tmux send-keys -t "$session:0.0" "cc" C-m
-    
-    # 2段目ペイン（worker1）でもClaude Code起動
-    echo -e "${YELLOW}Starting Claude Code in worker1 pane...${NC}"
-    tmux send-keys -t "$session:0.1" "cc" C-m
+    # 最上段ペイン（PRESIDENT）でClaude Code起動（スキップ版）
+    echo -e "${YELLOW}Starting Claude Code in PRESIDENT pane (skip permissions)...${NC}"
+    tmux send-keys -t "$session:0.0" "ccs" C-m
+
+    # 2段目ペイン（worker1）でもClaude Code起動（スキップ版）
+    echo -e "${YELLOW}Starting Claude Code in worker1 pane (skip permissions)...${NC}"
+    tmux send-keys -t "$session:0.1" "ccs" C-m
     
     echo -e "${GREEN}✓ Session $session created with 5 panes${NC}"
     

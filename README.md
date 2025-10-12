@@ -37,25 +37,78 @@ window1の下部3ペインには、左からDocker、サーバー、DBを起動�
 
 ## 前提条件と準備
 
-### 必須ソフトウェア
-- macOS または Linux
-- Tmux (インストール: `brew install tmux` または `apt install tmux`)
-- Claude Code CLI (`claude`コマンド)
-- Bash または Zsh
+### Step 1: Tmuxのインストール
 
-### 必要なフォルダ構成
-```
-~/
-├── Projects/               # プロジェクトフォルダ（必須）
-│   ├── my-project-1/       # 各プロジェクト
-│   ├── my-project-2/
-│   └── ...
-└── .zshrc または .bashrc   # シェル設定ファイル
+**macOS:**
+```bash
+brew install tmux
 ```
 
-**重要**: `~/Projects`フォルダがない場合は作成してください：
+**Linux:**
+```bash
+apt install tmux
+```
+
+**インストール確認:**
+```bash
+tmux -V
+```
+
+### Step 2: Tmux設定ファイルの作成
+
+`~/.tmux.conf`に以下の内容を記述してください：
+
+```bash
+# マウス操作を有効にする
+set-option -g mouse on
+
+
+# コピーした内容をMacのクリップボードに送る
+set -s copy-command 'pbcopy'
+```
+
+**設定の説明:**
+- `mouse on`: tmux内でマウス操作が可能になります
+- `pbcopy`: コピーした内容をmacOSのクリップボードに送信します
+
+### Step 3: 必要なフォルダ構成
+
+#### 1. スクリプト配置場所
+```
+~/script/tmux/
+├── tmux-project-launcher.sh  # tmux起動スクリプト
+└── tmux-kill-select.sh        # 一括終了スクリプト
+```
+
+#### 2. プロジェクトコード格納場所
+```
+~/Projects/                    # プロジェクトのコード（必須）
+├── project-a/                 # プロジェクトAのコード
+├── project-b/                 # プロジェクトBのコード
+└── ...
+```
+
+#### 3. プロジェクト設定ファイル格納場所
+```
+~/AIDD-Knowledge/projects/     # プロジェクト設定（必須）
+├── project-a/
+│   └── tools/
+│       └── tmux/              # プロジェクトA用のtmux設定
+├── project-b/
+│   └── tools/
+│       └── tmux/              # プロジェクトB用のtmux設定
+└── ...
+```
+
+**フォルダ構成の特徴:**
+- **コードと設定の分離**: 実際のコードは`~/Projects/`、設定ファイルは`~/AIDD-Knowledge/`に分離
+- **プロジェクト独自設定**: 各プロジェクト専用のtmux設定を`tools/tmux/`に配置可能
+
+**重要**: 以下のフォルダがない場合は作成してください：
 ```bash
 mkdir -p ~/Projects
+mkdir -p ~/AIDD-Knowledge/projects
+mkdir -p ~/script/tmux
 ```
 
 ## クイックスタート
@@ -105,6 +158,31 @@ which ccs  # 出力例: ccs: aliased to claude --dangerously-skip-permissions
 - `ccs`: スキップ版（許可スキップ） - 自動化・tmux用
 
 ### Step 5: 使ってみる
+
+#### tmux起動スクリプトの動作フロー
+
+**機能1: プロジェクト一覧表示と選択**
+- `~/AIDD-Knowledge/projects/`配下のプロジェクトを一覧表示
+- 番号で選択可能
+```
+利用可能なプロジェクト:
+1) project-a
+2) project-b
+3) project-c
+番号を選択してください:
+```
+
+**機能2: プロジェクト独自のtmux設定を読み込み**
+- 選択したプロジェクトの設定パス: `~/AIDD-Knowledge/projects/[プロジェクト名]/tools/tmux/`
+- このディレクトリ内のtmux設定ファイル（.sh、.confなど）を自動的に読み込み
+- プロジェクトごとに異なるペイン構成や起動コマンドを設定可能
+
+**機能3: 作業ディレクトリの自動切り替え**
+- tmuxセッションの作業ディレクトリは`~/Projects/[プロジェクト名]/`を使用
+- 設定は`~/AIDD-Knowledge/`から読み込むが、実際の作業は`~/Projects/`で実行
+- **重要**: コードと設定を分離して管理できる仕組み
+
+#### 実行方法
 ```bash
 # プロジェクトランチャーを起動
 ./tmux-project-launcher.sh
@@ -113,10 +191,11 @@ which ccs  # 出力例: ccs: aliased to claude --dangerously-skip-permissions
 ./tmux-kill-select.sh
 
 # 以下の流れで動作：
-# 1. ~/Projects内のプロジェクト一覧が表示される
+# 1. ~/AIDD-Knowledge/projects/内のプロジェクト一覧が表示される
 # 2. 番号を選択してEnter
-# 3. 2ウィンドウのTmuxセッションが起動（window1は5ペイン構成）
-# 4. 上位2ペインでClaude Code（ccs版）が自動起動
+# 3. 選択したプロジェクトのtmux設定を読み込み
+# 4. 作業ディレクトリを~/Projects/[プロジェクト名]/に設定して2ウィンドウのTmuxセッションが起動
+# 5. 上位2ペインでClaude Code（ccs版）が自動起動
 ```
 
 ## 便利な操作
@@ -125,7 +204,9 @@ which ccs  # 出力例: ccs: aliased to claude --dangerously-skip-permissions
 
 ## 注意事項
 
-- tmux-project-launcher.shは`~/Projects`フォルダ内のプロジェクトのみ対象
-- Claude Code（ccs版）は上位2ペイン（PRESIDENT、worker1）で自動起動
+- スクリプトは`~/AIDD-Knowledge/projects/`内のプロジェクトを検索対象とします
+- 実際の作業ディレクトリは`~/Projects/[プロジェクト名]/`になります
+- プロジェクト設定は`~/AIDD-Knowledge/projects/[プロジェクト名]/tools/tmux/`から読み込まれます
+- Claude Code（ccs版）は各ウィンドウの上位2ペインで自動起動
 - 既存のTmuxセッションがある場合は自動的にアタッチされます
 - セッション名は選択したプロジェクトのフォルダ名になります
